@@ -1,7 +1,10 @@
 package com.backend.unab.auth;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,9 +23,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final UserDetailsService userDetailsService;
+	private final List<String> allowedOrigins;
 
-	public SpringSecurityConfig(UserDetailsService userDetailsService) {
+	public SpringSecurityConfig(
+			UserDetailsService userDetailsService,
+			@Value("${app.cors.allowed-origins}") String allowedOriginsProperty) {
 		this.userDetailsService = userDetailsService;
+		this.allowedOrigins = Arrays.stream(allowedOriginsProperty.split(","))
+				.map(String::trim)
+				.filter(origin -> !origin.isEmpty())
+				.collect(Collectors.toList());
 	}
 
 	@Bean
@@ -58,7 +68,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedOrigins(this.allowedOrigins);
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
 		configuration.setAllowCredentials(false);

@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +21,6 @@ import com.backend.unab.dto.AuthLoginResponseDto;
 import com.backend.unab.models.entity.User;
 import com.backend.unab.models.services.UsuarioService;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthRestController {
