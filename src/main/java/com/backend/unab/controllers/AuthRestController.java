@@ -5,6 +5,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +32,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Authentication", description = "Authentication endpoints")
 public class AuthRestController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AuthRestController.class);
+
 	private final AuthenticationManager authenticationManager;
 	private final UsuarioService usuarioService;
 
@@ -43,6 +47,7 @@ public class AuthRestController {
 	@SecurityRequirements
 	public ResponseEntity<AuthLoginResponseDto> login(@RequestBody AuthLoginRequestDto request) {
 		if (request == null || !StringUtils.hasText(request.getUsername()) || !StringUtils.hasText(request.getPassword())) {
+			LOGGER.warn("Rejected authentication request because required credentials were missing");
 			throw new IllegalArgumentException("Username and password are required");
 		}
 
@@ -64,6 +69,7 @@ public class AuthRestController {
 		response.setTokenType("Basic");
 		response.setAccessToken(accessToken);
 
+		LOGGER.info("Authentication succeeded");
 		return ResponseEntity.ok(response);
 	}
 }
