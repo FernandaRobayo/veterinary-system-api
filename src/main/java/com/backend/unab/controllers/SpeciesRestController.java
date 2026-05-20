@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.unab.dto.SpeciesDto;
 import com.backend.unab.models.services.ISpeciesService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/species")
+@Tag(name = "Species", description = "Species management endpoints")
 public class SpeciesRestController {
 
 	private final ISpeciesService speciesService;
@@ -27,27 +31,32 @@ public class SpeciesRestController {
 	}
 
 	@PostMapping("")
+	@Operation(summary = "Create a species")
 	public ResponseEntity<SpeciesDto> create(@RequestBody SpeciesDto speciesDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(speciesService.create(speciesDto));
 	}
 
 	@PutMapping("{id}")
+	@Operation(summary = "Update a species")
 	public ResponseEntity<SpeciesDto> update(@PathVariable Long id, @RequestBody SpeciesDto speciesDto) {
 		return ResponseEntity.ok(speciesService.update(id, speciesDto));
 	}
 
 	@DeleteMapping("{id}")
+	@Operation(summary = "Delete a species")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		speciesService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("{id}")
+	@Operation(summary = "Find a species by id")
 	public ResponseEntity<SpeciesDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(speciesService.findById(id));
 	}
 
 	@GetMapping("")
+	@Operation(summary = "List all species")
 	public ResponseEntity<List<SpeciesDto>> findAll() {
 		return ResponseEntity.ok(speciesService.findAll());
 	}

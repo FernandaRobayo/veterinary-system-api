@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.unab.dto.BreedDto;
 import com.backend.unab.models.services.IBreedService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/breeds")
+@Tag(name = "Breeds", description = "Breed management endpoints")
 public class BreedRestController {
 
 	private final IBreedService breedService;
@@ -27,27 +31,32 @@ public class BreedRestController {
 	}
 
 	@PostMapping("")
+	@Operation(summary = "Create a breed")
 	public ResponseEntity<BreedDto> create(@RequestBody BreedDto breedDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(breedService.create(breedDto));
 	}
 
 	@PutMapping("{id}")
+	@Operation(summary = "Update a breed")
 	public ResponseEntity<BreedDto> update(@PathVariable Long id, @RequestBody BreedDto breedDto) {
 		return ResponseEntity.ok(breedService.update(id, breedDto));
 	}
 
 	@DeleteMapping("{id}")
+	@Operation(summary = "Delete a breed")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		breedService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("{id}")
+	@Operation(summary = "Find a breed by id")
 	public ResponseEntity<BreedDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(breedService.findById(id));
 	}
 
 	@GetMapping("")
+	@Operation(summary = "List all breeds")
 	public ResponseEntity<List<BreedDto>> findAll() {
 		return ResponseEntity.ok(breedService.findAll());
 	}

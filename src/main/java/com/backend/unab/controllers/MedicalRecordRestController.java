@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.unab.dto.MedicalRecordDto;
 import com.backend.unab.models.services.IMedicalRecordService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/medical-records")
+@Tag(name = "Medical Records", description = "Medical record management endpoints")
 public class MedicalRecordRestController {
 
 	private final IMedicalRecordService medicalRecordService;
@@ -27,27 +31,32 @@ public class MedicalRecordRestController {
 	}
 
 	@PostMapping("")
+	@Operation(summary = "Create a medical record")
 	public ResponseEntity<MedicalRecordDto> create(@RequestBody MedicalRecordDto medicalRecordDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(medicalRecordService.create(medicalRecordDto));
 	}
 
 	@PutMapping("{id}")
+	@Operation(summary = "Update a medical record")
 	public ResponseEntity<MedicalRecordDto> update(@PathVariable Long id, @RequestBody MedicalRecordDto medicalRecordDto) {
 		return ResponseEntity.ok(medicalRecordService.update(id, medicalRecordDto));
 	}
 
 	@DeleteMapping("{id}")
+	@Operation(summary = "Delete a medical record")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		medicalRecordService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("{id}")
+	@Operation(summary = "Find a medical record by id")
 	public ResponseEntity<MedicalRecordDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(medicalRecordService.findById(id));
 	}
 
 	@GetMapping("")
+	@Operation(summary = "List all medical records")
 	public ResponseEntity<List<MedicalRecordDto>> findAll() {
 		return ResponseEntity.ok(medicalRecordService.findAll());
 	}

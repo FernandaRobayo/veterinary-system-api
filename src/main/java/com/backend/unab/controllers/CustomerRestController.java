@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.unab.dto.CustomerDto;
 import com.backend.unab.models.services.ICustomerService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/customers")
+@Tag(name = "Customers", description = "Customer management endpoints")
 public class CustomerRestController {
 
 	private final ICustomerService customerService;
@@ -27,27 +31,32 @@ public class CustomerRestController {
 	}
 
 	@PostMapping("")
+	@Operation(summary = "Create a customer")
 	public ResponseEntity<CustomerDto> create(@RequestBody CustomerDto customerDto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(customerService.create(customerDto));
 	}
 
 	@PutMapping("{id}")
+	@Operation(summary = "Update a customer")
 	public ResponseEntity<CustomerDto> update(@PathVariable Long id, @RequestBody CustomerDto customerDto) {
 		return ResponseEntity.ok(customerService.update(id, customerDto));
 	}
 
 	@DeleteMapping("{id}")
+	@Operation(summary = "Delete a customer")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		customerService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("{id}")
+	@Operation(summary = "Find a customer by id")
 	public ResponseEntity<CustomerDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(customerService.findById(id));
 	}
 
 	@GetMapping("")
+	@Operation(summary = "List all customers")
 	public ResponseEntity<List<CustomerDto>> findAll() {
 		return ResponseEntity.ok(customerService.findAll());
 	}

@@ -21,8 +21,13 @@ import com.backend.unab.dto.AuthLoginResponseDto;
 import com.backend.unab.models.entity.User;
 import com.backend.unab.models.services.UsuarioService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Authentication endpoints")
 public class AuthRestController {
 
 	private final AuthenticationManager authenticationManager;
@@ -34,6 +39,8 @@ public class AuthRestController {
 	}
 
 	@PostMapping("/login")
+	@Operation(summary = "Authenticate a user and return a Basic Auth token")
+	@SecurityRequirements
 	public ResponseEntity<AuthLoginResponseDto> login(@RequestBody AuthLoginRequestDto request) {
 		if (request == null || !StringUtils.hasText(request.getUsername()) || !StringUtils.hasText(request.getPassword())) {
 			throw new IllegalArgumentException("Username and password are required");
